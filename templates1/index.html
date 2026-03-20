@@ -1,1 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Available Slots{% endblock %}
 
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Available Slots</h1>
+    <p class="page-subtitle">Choose a time that works for you and book it in seconds</p>
+</div>
+
+{% if grouped %}
+    {% for date_key, group in grouped.items() %}
+    <section class="date-group" id="date-{{ date_key }}">
+        <h2 class="date-heading">
+            <span class="date-icon">📆</span>
+            {{ group.date_label }}
+        </h2>
+        <div class="slots-grid">
+            {% for slot in group.slots %}
+            <div class="slot-card" id="slot-{{ slot.id }}">
+                <div class="slot-time">
+                    <span class="time-start">{{ slot.start_label }}</span>
+                    <span class="time-separator">→</span>
+                    <span class="time-end">{{ slot.end_label }}</span>
+                </div>
+                <div class="slot-duration">1 Hour</div>
+                <span class="slot-status available">Available</span>
+                <a href="{{ url_for('book', slot_id=slot.id) }}" class="btn btn-book" id="book-btn-{{ slot.id }}">
+                    Book Now
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endfor %}
+{% else %}
+    <div class="empty-state">
+        <div class="empty-icon">🎉</div>
+        <h2>All Slots Booked!</h2>
+        <p>There are no available slots at the moment. Check back later for new openings.</p>
+    </div>
+{% endif %}
+{% endblock %}
