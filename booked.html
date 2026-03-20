@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Booked Slots{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Booked Slots</h1>
+    <p class="page-subtitle">All confirmed bookings are listed below</p>
+</div>
+
+{% if slots %}
+<div class="booked-grid">
+    {% for slot in slots %}
+    <div class="booked-card" id="booked-{{ slot.id }}">
+        <div class="booked-card-header">
+            <span class="slot-status booked">Booked</span>
+            <form method="POST" action="{{ url_for('cancel', slot_id=slot.id) }}" class="cancel-form" id="cancel-form-{{ slot.id }}">
+                <button type="submit" class="btn btn-cancel" id="cancel-btn-{{ slot.id }}" title="Cancel Booking">✕</button>
+            </form>
+        </div>
+        <div class="booked-info">
+            <div class="detail-row">
+                <span class="detail-label">👤 Name</span>
+                <span class="detail-value">{{ slot.booked_by }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">✉️ Email</span>
+                <span class="detail-value">{{ slot.booked_email }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">📆 Date</span>
+                <span class="detail-value">{{ slot.date_label }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">🕐 Time</span>
+                <span class="detail-value">{{ slot.start_label }} → {{ slot.end_label }}</span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <div class="empty-icon">📭</div>
+    <h2>No Bookings Yet</h2>
+    <p>Nobody has booked a slot yet. Be the first!</p>
+    <a href="{{ url_for('index') }}" class="btn btn-book" style="margin-top: 1.5rem; display: inline-block;">Browse Slots</a>
+</div>
+{% endif %}
+{% endblock %}
